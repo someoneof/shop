@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head >
+	<meta charset="UTF-8" />
+	<title >注册</title >
+	<script th:src="@{/js/jquery-3.1.1.min.js}" ></script >
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#register').click(function () {
+				if(judgeForm()){
+				    return false;
+				}
+			    var customer={};
+				customer.nickName=$('#nickName').val();
+				customer.password=$('#password').val();
+				customer.tel=$('#tel').val();
+				customer.cusAddress=$('#address').val();
+				customer.email=$('#email').val();
+			    $.ajax({
+				    type:'post',
+					url:'/customer',
+                    contentType: "application/json",
+                    data : JSON.stringify(customer),
+					success:function () {
+						alert("注册成功");
+                    },
+                    error:function () {
+						alert("注册失败");
+                    }
+				})
+            });
+
+			function judgeForm() {
+                var nickName=$('#nickName').val();
+                var password=$('#password').val();
+                var repassword=$('#repassword').val();
+				var tel=$('#tel').val();
+                var cusAddress=$('#address').val();
+                var email=$('#email').val();
+				if(!judgeField(nickName)){
+				    alert("please enter nickName");
+				    return false;
+				}
+				if(!judgeField(password)){
+				    alert("please enter password");
+				    return false;
+				}
+				if(!judgeField(repassword)){
+                    alert("please enter repassword");
+                    return false;
+                }
+				if(password!=repassword){
+				    alert("please confirme that password is the same as the repassword");
+                    return false;
+				}
+				if(!judgeField(tel)){
+				    alert("please enter tel");
+                    return false;
+				}
+				if(!judgeField(cusAddress)){
+				    alert("please enter cusAddress");
+                    return false;
+				}
+				if(!judgeField(email)){
+				    alert("please enter email");
+                    return false;
+				}
+
+            }
+
+            function judgeField(field) {
+				if(field!=null)
+				    if(field.trim()!="")
+				        if(field!=undefined)
+				   	 		return true;
+				return false;
+            }
+        })
+	</script>
+</head >
+<body >
+<div id="container">
+<br/><br/><br/>
+	<h1 align="center">用户注册</h1>
+	<form href="#" method="post" th:object="${customer}">
+		<table align="center">
+			<tr>
+				<th>用户名:</th>
+				<td><input type="text" id="nickName" th:field="*{nickName}"/></td>
+			</tr>
+			<tr>
+				<th>密码:</th>
+				<td><input type="password" id="password" th:field="*{password}"/></td>
+			</tr>
+			<tr>
+				<th>确认密码:</th>
+				<td><input type="password" id="repassword" name="repassword"/></td>
+			</tr>
+			<tr>
+				<th>号码:</th>
+				<td><input type="text" id="tel" th:field="*{tel}"/></td>
+			</tr>
+			<tr>
+				<th>地址:</th>
+				<td><input type="text" id="address" th:field="*{cusAddress}"/></td>
+			</tr>
+			<tr>
+				<th>邮箱:</th>
+				<td><input type="text" id="email" th:field="*{email}"/></td>
+			</tr>
+			<tr>
+				<td align="right"><button id="register">注册</button></td>
+			</tr>
+		</table>
+	</form>
+</div>
+</body >
+</html >

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head >
+	<meta charset="UTF-8" />
+	<title >商品管理</title >
+	<script type="text/javascript" th:src="@{/script/jquery-3.1.1.min.js}" src="../static/script/jquery-3.1.1.min.js" ></script >
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#chkAll').click(function () {
+				var state=$('#chkAll').prop("checked");
+				$.each($("input[name='pid']"),function () {
+					$(this).prop("checked",state);
+                })
+            });
+			$('#onSale').click(function () {
+				var methodName=$('#onSale').val();
+				var ids=getIds();
+				if(ids.length>0){
+				    $.ajax({
+				        type:'put',
+						url:'/product/'+ids+'/'+methodName,
+						success:function (data) {
+							alert(data);
+							$(location).prop('href','/productlist');
+                        },
+                        error:function (data) {
+							alert(data);
+                        }
+					})
+				}
+				else{
+				    alert("please chose one item at least");
+				}
+            });
+
+
+            $('#noSale').click(function () {
+                var methodName=$('#noSale').val();
+                var ids=getIds();
+                if(ids.length>0){
+                    $.ajax({
+                        type:'put',
+                        url:'/product/'+ids+'/'+methodName,
+                        success:function (data) {
+                            alert(data);
+                            $(location).prop('href','/productlist');
+                        },
+                        error:function (data) {
+                            alert(data);
+                        }
+                    })
+                }
+                else{
+                    alert("please chose one item at least");
+                }
+            });
+
+
+			function getIds() {
+				var ids=new Array();
+				var i=0;
+				$.each($("input[name='pid']"),function () {
+					if($(this).prop("checked")){
+					    ids[i++]=$(this).val();
+					}
+                });
+				return ids;
+            }
+        })
+	</script>
+</head >
+<body >
+	<table>
+		<tr>
+			<td>Chose</td>
+			<td>产品ID</td>
+			<td>产品名称</td>
+			<td>产品价格</td>
+			<td>产品状态</td>
+			<td>产品描述</td>
+			<td>产品图片</td>
+			<td>价格图片</td>
+			<td>产品库存</td>
+			<td>编辑产品</td>
+		</tr>
+		<tr th:each="product:${page.content}">
+			<td><input type="checkbox" name="pid" th:value="${product.productId}"/></td>
+			<td th:text="${product.productId}"></td>
+			<td th:text="${product.productName}"></td>
+			<td th:text="${product.productPrice}"></td>
+			<td th:if="${product.visible}" th:text="上架"></td>
+			<td th:if="!${product.visible}" th:text="下架"></td>
+			<td th:text="${product.productDesc}"></td>
+			<td><img th:src="${product.imagePath}" th:width="50" th:height="40"/></td>
+			<td><img th:src="${product.pricePath}" th:width="50" th:height="40"/></td>
+			<td th:text="${product.quantity}"></td>
+			<td><a th:href="@{/productedit(id=${product.productId})}">修改产品信息</a></td>
+		</tr>
+		<hr/>
+		<tr>
+			<td><input type="checkbox" id="chkAll"/>全选</td>
+			<td><button id="onSale" value="sale">上架</button></td>
+			<td><button id="noSale" value="notSale">下架</button></td>
+			<td><span th:text="|当前第${page.number+1}页|"></span>&nbsp;&nbsp;&nbsp;
+				<span th:text="|每页显示${page.size}条|"></span>&nbsp;&nbsp;&nbsp;
+				<span th:text="|一共${page.totalPages}页|"></span>&nbsp;&nbsp;&nbsp;
+			</td>
+			<td><a th:href="@{/productlist(pageNum=1)}">首页</a></td>
+			<td><a th:href="@{/productlist(pageNum=${page.number})}">上一页</a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a th:href="@{/productlist(pageNum=${page.number}+2)}">下一页</a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a th:href="@{/productlist(pageNum=${page.totalPages})}">尾页</a>&nbsp;&nbsp;&nbsp;&nbsp;
+			</td>
+		</tr>
+	</table>
+</body >
+</html >

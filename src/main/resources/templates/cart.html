@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head >
+	<meta charset="UTF-8" />
+	<title >我的购物车</title >
+	<script type="text/javascript" th:src="@{/script/jquery-3.1.1.min.js}" src="../static/script/jquery-3.1.1.min.js" ></script >
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#submit').click(function () {
+				$.ajax({
+				    type:'post',
+					url:'/buyCart',
+					success:function () {
+                    },
+					error:function () {
+                    }
+				})
+            })
+        })
+	</script >
+</head >
+<body >
+<table >
+	<tr>
+		<td>产品名称</td>
+		<td>产品数量</td>
+		<td>产品描述</td>
+		<td>产品价格</td>
+	</tr>
+	<tr th:each="item:${buyCart.items}">
+		<td th:text="${item.product.productName}"></td>
+		<td th:text="${item.count}"></td>
+		<td th:text="${item.product.productDesc}"></td>
+		<td th:text="${item.product.productPrice}"></td>
+	</tr>
+	<tr>
+		<td>总价格为:</td>
+		<td></td>
+		<td></td>
+		<td th:text="${buyCart.totalPrice}" bgcolor="red"></td>
+	</tr>
+	<hr/>
+	<tr>
+		<td>
+			<button id="submit">结算</button>
+		</td>
+	</tr>
+</table>
+</body >
+</html >

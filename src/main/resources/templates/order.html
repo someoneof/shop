@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head >
+	<meta charset="UTF-8" />
+	<title >订单查看</title >
+</head >
+<body >
+<table th:object="${orders}">
+	<tr>
+		<th>用户姓名</th>
+		<td th:field="*{customer.customerName}"></td>
+	</tr>
+	<tr>
+		<th>用户地址:</th>
+		<td th:field="*{customer.cusAddress}"></td>
+	</tr>
+	<tr>
+		<th>用户电话:</th>
+		<td th:field="*{customer.tel}"></td>
+	</tr>
+	<tr>
+		<th>订单状态:</th>
+		<span th:switch="*{orders.orderState}">
+			<td th:case="CANCEL">订单已被取消</td>
+			<td th:case="WAITCONFIRM">等待订单确认</td>
+			<td th:case="WAITPAYMENT">未付款</td>
+			<td th:case="ADMEASUREPRODUCT">已经付款</td>
+			<td th:case="WAITDELIVER">等待配送</td>
+			<td th:case="DELIVERED">配送中</td>
+			<td th:case="RECEIVED">已经签收</td>
+		</span>
+	</tr>
+	<tr>
+		<th>总价格:</th>
+		<td th:field="*{ordesr.totalPrice}"></td>
+	</tr>
+</table>
+</body >
+</html >

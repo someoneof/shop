@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head >
+	<meta charset="UTF-8" />
+	<title >贝壳优选</title >
+	<link rel="stylesheet" href="styles/layout.css" th:src="@{/styles/layout.css}" />
+	<script type="text/javascript" th:src="@{/script/jquery-3.1.1.min.js}" src="../static/script/jquery-3.1.1.min.js" ></script >
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+		    $.each($("a[name='toCart']"),function () {
+				$(this).click(function () {
+				    var pid=$(this).attr("value");
+				    if(pid==null) if(pid==undefined){
+				        alert("please chose one item");
+						return false;
+					}
+					$.ajax({
+					    type:'get',
+						url:'/buyCart/'+pid,
+						success:function (data) {
+							alert(data);
+                        },
+						error:function (data) {
+							alert(data);
+                        }
+					})
+                })
+            })
+		    $.each($('#pid'),function () {
+                    $(this).click(function () {
+                        var pid = $(this).attr("value");
+                        alert("pid:" + pid);
+                        if (!(pid == null) || !(pid == undefined)) {
+                            $.ajax({
+                                type: 'get',
+                                url: '/' + pid,
+                                success: function () {
+                                },
+                                error: function (data) {
+                                    alert(data);
+                                }
+                            })
+                        }
+                        else { alert("error!");}
+                    });
+            })
+        })
+	</script>
+</head >
+<body >
+<div id="header" >
+	<ul>
+		<li><a href="#" ><img src="../static/images/paihang.png" th:src="@{/images/paihang.png}" /></a ></li >
+		<li><a href="" ><img src="../static/images/logo.png" th:src="@{/images/logo.png}" /></a ></li >
+		<li><a th:href="@{/customer}" id="login"><img src="../static/images/login.png" th:src="@{/images/login.png}" /></a ></li >
+		<li><a th:href="@{/buyCart}"><img th:src="@{/images/cart.png}"/></a></li>
+	</ul >
+</div >
+<div id="babay" >
+	<img th:src="@{/images/mainImage.png}" />
+</div >
+<div id="list" >
+	<h1 align="center" >排行</h1 >
+	<table >
+		<tr >
+			<td th:each="product:${page.content}">
+			<div align="center">
+				<div><img th:src="${product.imagePath}" /></div >
+				<div><span th:text="${product.productName}" ></span></div >
+				<div><span th:text="${product.productDesc}" ></span></div >
+				<div><img th:src="${product.pricePath}" /></div >
+				<div>
+					<div><a src="#"><img th:src="@{/images/buy.png}"/></a></div>
+					<div><a name="toCart" src="#" th:value="${product.productId}"><img th:src="@{/images/toCart.png}"/></a></div>
+				</div>
+			</div>
+		</td>
+		</tr>
+	</table >
+</div >
+<div id="QRCode" align="center" >
+	<img th:src="@{/images/qr.png}" />
+</div >
+
+</body >
+</html >

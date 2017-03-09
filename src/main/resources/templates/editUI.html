@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head >
+	<meta charset="UTF-8" />
+	<title >修改产品信息</title >
+	<script type="text/javascript" th:src="@{/script/jquery-3.1.1.min.js}" src="../static/script/jquery-3.1.1.min.js" ></script >
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#edit').click(function () {
+			    var product={};
+			    product.productId=$('#id').attr("value");
+			    product.productName=$('#name').val();
+			    product.productDesc=$('#desc').val();
+			    product.productPrice=$('#price').val();
+			    product.vendor=$('#vendor').val();
+			    product.quantity=$('#quantity').val();
+			    product.imagePath=$('#imagePath').val();
+			    product.pricePath=$('#pricePath').val();
+			    alert(JSON.stringify(product));
+				$.ajax({
+				    type:'post',
+					url:'/edit',
+                    contentType: "application/json",
+                    data : JSON.stringify(product),
+					success:function (data) {
+						alert("修改成功!);
+						$(location).prop('href','/productlist');
+                    },
+					error:function (data) {
+						alert("修改失败");
+                    }
+				})
+            })
+        })
+	</script>
+</head >
+<body >
+<br/><br/><br/><br/><br/>
+<h1 align="center">修改产品信息</h1>
+<form action="#" method="post" th:object="${product}">
+	<input type="hidden" id="id" th:value="*{productId}"/>
+	<table align="center">
+		<tr>
+			<th>产品名称</th>
+			<td><input type="text" id="name" th:field="*{productName}"/></td>
+		</tr>
+		<tr>
+			<th>产品描述</th>
+			<td><input type="text" id="desc" th:field="*{productDesc}"/></td>
+		</tr>
+		<tr>
+			<th>产品价格</th>
+			<td><input type="text" id="price" th:field="*{productPrice}"/></td>
+		</tr>
+		<tr>
+			<th>库存</th>
+			<td><input type="text" id="quantity" th:field="*{quantity}"/></td>
+		</tr>
+		<tr>
+			<th>供货商</th>
+			<td><input type="text" id="vendor" th:field="*{vendor.verName}"/></td>
+		</tr>
+		<tr>
+			<th>产品图片</th>
+			<td><input type="file" id="imagePath" th:src="${product.imagePath}" th:width="70" th:height="60"/></td>
+		</tr>
+		<tr>
+			<th>价格图片</th>
+			<td><input type="file" id="pricePath" th:src="${product.pricePath}" th:width="40" th:height="30"/></td>
+		</tr>
+		<tr>
+			<td><button id="edit">修改</button></td>
+		</tr>
+	</table>
+</form>
+</body >
+</html >
